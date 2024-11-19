@@ -1,9 +1,9 @@
-public class People {
+public class Person {
 
     String name;
     double duration;
 
-    public People(String name, double duration) {
+    public Person(String name, double duration) {
         this.name = name;
         this.duration = duration;
     }

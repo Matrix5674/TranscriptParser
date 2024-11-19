@@ -7,16 +7,52 @@ import java.util.List;
 
 public class Main {
     public static ArrayList<String> lines = new ArrayList<>();
-    public static ArrayList<People> people = new ArrayList<>();
+    public static ArrayList<Person> people = new ArrayList<>();
     public static String PATH = "Assets/DobervichPlanningSession2.vtt";
+    public static String startTime, endTime;
 
     public static void main(String[] args) {
         lines = readFile(PATH);
+        extractData();
 
+    }
+
+    public static void extractData(){
+        startTime = lines.get(3);
         for (int line = 3; line < lines.size()-1; line+=4){
-            people.add(new People(readName(lines.get(line+1)), getTime(lines.get(line))));
+            people.add(new Person(readName(lines.get(line+1)), getTime(lines.get(line))));
         };
+        endTime = lines.get(lines.size()-3);
+    }
 
+
+
+    public static void timeMembersTalked(){
+        ArrayList<String> uniquePeople = getListOfUniqueNames(people);
+        String a = "";
+        double[] totalDurations = new double[uniquePeople.size()];
+
+
+        for(int i = 0; i < uniquePeople.size(); i++){
+            String uniquePerson = uniquePeople.get(i);
+            for (Person person: people){
+                if (uniquePerson.equals(person.name)){
+                    totalDurations[i] += person.duration;
+                }
+            }
+        }
+
+        for (int i = 0; i < uniquePeople.size(); i++){
+            a += uniquePeople.get(i) + ": " + totalDurations[i];
+        }
+
+    }
+
+
+
+    public static double getLengthOfMeeting(){
+        String e = endTime.split("-->")[1];
+        return getTime(("00:00:00.000 " + "--> " + e));
     }
 
     public static int numOfSpeakerSwitches(){
@@ -53,17 +89,28 @@ public class Main {
         return endTime-startTime;
     }
 
-    public static Double[] formatTime(String t) {
+    public static double[] formatTime(String t) {
         String[] result = t.split(":");
-        Double[] times = new Double[4];
+        double[] times = new double[4];
         for (int i = 0; i < result.length; i++){
             times[i] = Double.parseDouble(result[i]);
         }
         return times;
     }
 
-    public static double convertToSeconds(Double[] time){
+    public static double convertToSeconds(double[] time){
         return (((time[0]*60)+time[1])*60)+time[2];
+    }
+
+
+    public static ArrayList<String> getListOfUniqueNames(ArrayList<Person> p){
+        ArrayList<String> people = new ArrayList<>();
+        for (Person person:p){
+            if (!(people.contains(person.name))){
+                people.add(person.name);
+            }
+        }
+        return people;
     }
 
 }
