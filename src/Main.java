@@ -6,28 +6,46 @@ import java.util.List;
 
 
 public class Main {
-    public static ArrayList<String> lines = new ArrayList<>();
-    public static ArrayList<Person> people = new ArrayList<>();
-    public static String PATH = "Assets/DobervichPlanningSession2.vtt";
-    public static String startTime, endTime;
+
 
     public static void main(String[] args) {
+        ArrayList<String> lines = new ArrayList<>();
+        String PATH = "Assets/DobervichPlanningSession2.vtt";
         lines = readFile(PATH);
-        extractData();
+        ArrayList<Person> people = extractData(lines);
+
+
+        //Average length talking until speaker switch
 
     }
 
-    public static void extractData(){
-        startTime = lines.get(3);
+    public static void avgLengthTalking(){
+
+    }
+
+    public static ArrayList<Person> extractData(ArrayList<String> lines){
+        ArrayList<Person> people = new ArrayList<>();
+        String startTime = lines.get(3);
         for (int line = 3; line < lines.size()-1; line+=4){
             people.add(new Person(readName(lines.get(line+1)), getTime(lines.get(line))));
         };
-        endTime = lines.get(lines.size()-3);
+        String endTime = lines.get(lines.size()-3);
+
+        for (String name : getListOfUniqueNames(people))
+            for(Person p : people){
+                if (p.getName().equals(name)){
+                    p.addtime(p.getDuration());
+                }
+            }
+
+    }
+
+    public static int numOfMembers(ArrayList<Person> people){
+        return getListOfUniqueNames(people).size();
     }
 
 
-
-    public static void timeMembersTalked(){
+    public static void timeMembersTalked(ArrayList<Person> people){
         ArrayList<String> uniquePeople = getListOfUniqueNames(people);
         String a = "";
         double[] totalDurations = new double[uniquePeople.size()];
@@ -36,8 +54,8 @@ public class Main {
         for(int i = 0; i < uniquePeople.size(); i++){
             String uniquePerson = uniquePeople.get(i);
             for (Person person: people){
-                if (uniquePerson.equals(person.name)){
-                    totalDurations[i] += person.duration;
+                if (uniquePerson.equals(person.getName())){
+                    totalDurations[i] += person.getDuration();
                 }
             }
         }
@@ -50,12 +68,12 @@ public class Main {
 
 
 
-    public static double getLengthOfMeeting(){
+    public static double getLengthOfMeeting(String endTime){
         String e = endTime.split("-->")[1];
         return getTime(("00:00:00.000 " + "--> " + e));
     }
 
-    public static int numOfSpeakerSwitches(){
+    public static int numOfSpeakerSwitches(ArrayList<Person> people){
         return people.size();
     }
 
@@ -106,8 +124,8 @@ public class Main {
     public static ArrayList<String> getListOfUniqueNames(ArrayList<Person> p){
         ArrayList<String> people = new ArrayList<>();
         for (Person person:p){
-            if (!(people.contains(person.name))){
-                people.add(person.name);
+            if (!(people.contains(person.getName()))){
+                people.add(person.getName());
             }
         }
         return people;

@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+
 public class Person {
 
-    String name;
-    double duration;
+    private String name;
+    private double duration;
+    String startTime, endTime;
+    private ArrayList<Double> timeTalked = new ArrayList<Double>();
 
     public Person(String name, double duration) {
         this.name = name;
@@ -12,5 +16,21 @@ public class Person {
         duration = d;
     }
 
+    public String getName() {
+        return name;
+    }
 
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public ArrayList<Double> getTimeTalked() {
+        return timeTalked;
+    }
+
+
+    public void addtime(double time){
+        timeTalked.add(time);
+    }
 }
