@@ -1,36 +1,36 @@
 import java.util.ArrayList;
 
 public class Person {
-
     private String name;
     private double duration;
-    String startTime, endTime;
-    private ArrayList<Double> timeTalked = new ArrayList<Double>();
+    private double totalTimeTalked;
+    private int timesSpeakerSwitched;
 
     public Person(String name, double duration) {
         this.name = name;
         this.duration = duration;
+        this.totalTimeTalked = 0.0;
+        this.timesSpeakerSwitched = 0;
     }
 
-    public void setDuration(double d){
-        duration = d;
+    public int getTimesSpeakerSwitched() {
+        return timesSpeakerSwitched;
     }
+
+    public void incrementTimesSpeakerSwitched() {
+        this.timesSpeakerSwitched++;
+    }
+
 
     public String getName() {
         return name;
     }
 
-
-    public double getDuration() {
-        return duration;
+    public double getTimeTalked() {
+        return totalTimeTalked;
     }
-
-    public ArrayList<Double> getTimeTalked() {
-        return timeTalked;
-    }
-
 
     public void addtime(double time){
-        timeTalked.add(time);
+        totalTimeTalked += time;
     }
 }
